@@ -1,0 +1,9 @@
+<%= form_with model: [post , comment] do |form| %>
+  
+   <%= form.hidden_field :parent_id %>
+      <div >
+        <%= form.label 'Reply' %>
+        <%= form.text_area :content%>
+      </div>
+      <%= form.submit 'Submit' %>
+<% end %>

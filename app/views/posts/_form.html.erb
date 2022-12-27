@@ -1,0 +1,22 @@
+<%= form_with model: post do |form| %>
+  <div>
+    <%= form.label :post_file %><br>
+    <%= form.file_field :post_file %>
+  </div>
+
+  <div>
+    <%= form.label :video %><br>
+    <%= form.file_field :video %>
+  </div>
+
+  <div >
+    <%= form.label :description %><br>
+    <%= form.text_field :description %>
+
+  </div>
+  
+  <p>
+    <%= form.submit %>
+  </p>
+ 
+<% end %>

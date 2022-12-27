@@ -1,0 +1,24 @@
+<div class="row justify-content-start">
+  <% @posts.each do |post| %>
+    <div>
+     <%if post.post_file.present?%>
+       <center>
+          
+         <%if post.post_file.content_type.include?("image")%>
+           <%= image_tag url_for(post.post_file), :size => "460x580" %>
+         <% else%>
+           <%= video_tag url_for(post.post_file), controls: "" %>
+         <% end %>    
+       </br> 
+        <%= post.user.user_name%>
+       <strong>description:</strong>
+        <%= post.description %></br>
+        <%= link_to "Show Comment,", post_comments_path(post) %>
+        <%= link_to " like", post_path(post), :size => "460x580" %>
+       
+    </div> 
+       </center>
+     <% end %>
+    </div>
+  <% end %>
+</div>
