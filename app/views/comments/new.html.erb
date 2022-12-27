@@ -1,0 +1,9 @@
+
+
+<% if params[:parent_id].present? %>
+   <h1>Add a reply:</h1>
+   <%= render 'replyform', post: @post, comment: @comment%>
+<% else %>
+   <h1>Add a comment:</h1>
+ 	<%= render 'commentform', post: @post %>
+<% end %>
