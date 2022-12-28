@@ -8,7 +8,11 @@ Rails.application.routes.draw do
   resources :posts do
     get "search", on: :collection
     get 'profile', on: :collection
-    resources :comments
+    resources :likes
+    resources :comments do
+      resources :likes
+    end  
+
   end
   
 end

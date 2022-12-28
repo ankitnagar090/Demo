@@ -4,7 +4,7 @@ class Post < ApplicationRecord
   mount_uploader :video, VideoUploader  
 
   has_many :comments
-  has_many :likes
+  has_many :likes , as: :likeable
   has_many :favorites
   belongs_to :user
 end

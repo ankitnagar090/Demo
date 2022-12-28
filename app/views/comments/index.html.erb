@@ -12,6 +12,8 @@
       <%= " :- " %>
       <%= comment.content %>
       <%= link_to 'reply', new_post_comment_path(@post, parent_id: comment.id), remote: true, class: 'd-block' %></br>
+      <%= button_to 'Like', post_likes_path(@post, comment_id: comment.id), method: :post %>
+      <p><%= comment.likes.count %> <%= (comment.likes.count) == 1 ? 'Like' : 'Likes'%></p>
     	
     <% if comment.replies.any? %>
      <% comment.replies.each do |reply| %> 
