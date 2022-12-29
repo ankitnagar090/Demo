@@ -14,8 +14,16 @@
        <strong>description:</strong>
         <%= post.description %></br>
         <%= link_to "Show Comment,", post_comments_path(post) %>
-        <%= link_to " like", post_path(post), :size => "460x580" %>
+        
        
+
+       <% pre_like = post.likes.find { |like| like.user_id == current_user.id} %>
+       <p><%= post.likes.count %> <%= (post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
+       <% if pre_like %>
+         <%= button_to 'Unlike', post_like_path(post, pre_like), method: :delete %>
+       <% else %>
+         <%= button_to 'Like', post_likes_path(post), method: :post %>
+       <% end %>
     </div> 
        </center>
      <% end %>
