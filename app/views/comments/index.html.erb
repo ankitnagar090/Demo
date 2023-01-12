@@ -1,30 +1,80 @@
-<h1>Comment</h1>
+<%= render "shared/header" %></br>
+<section class="gradient-custom">
+  <div class="container my-5 py-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-12 col-lg-10 col-xl-8">
+        <div class="card">
+          <div class="card-body p-4">
+            <h4 class="text-center mb-4 pb-2"> Comments </h4>
+            <div class="span4 offset2" style="margin-top:15px;">
+              <button class="btn pull-right" type="button"><%= link_to "Add Comment.", new_post_comment_path %></button>
+            </div>
+            <div class="row">
+              <div class="col">
+                <% @comment.each do |comment| %>
+                  <% if !comment.parent_id.present? %>
+                    <div class="d-flex flex-start mt-1">
+                      <%if comment.user.profile_photo.present?%>
+                        <%= image_tag url_for(comment.user.profile_photo),:size => "50x50", class: "rounded-circle shadow-1-strong me-3" %>
+                      <% end%>
+                      
+                      <div class="flex-grow-1 flex-shrink-1">
+                        <div>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="mb-1">
+                               <%= comment.user.user_name %>
+                            </p>
+                            <a href="#!"><i class="fas fa-reply fa-xs"></i><span class="small"><%= link_to 'reply', new_post_comment_path(@post, parent_id: comment.id), remote: true, class: 'd-block' %></span></a>
+                          </div>
+                          <p class="small mb-0">
+                            <%= comment.content %>
+                          </p>
+                          <% pre_like = find_like(comment,current_user.id )%>
+                          <p><%= comment.likes.count %> <%= (comment.likes.count) == 1 ? 'Like' : 'Likes'%></p>
+                          <% if pre_like %>
+                            <%= link_to post_comment_like_path(@post, comment, pre_like),data: { turbo_method: :delete } do%>
+                              <h3 ><%= image_tag "/assets/disllike.png", :size => "40x40" %></h3>
+                            <%end%>
+                          <% else %>
+                            <%= link_to post_likes_path(comment_id: comment.id),data: { turbo_method: :post } do%>
+                              <h3 ><%= image_tag "/assets/like1.png", :size => "40x40" %></h3>
+                            <%end%>
+                          <% end %>
+                        </div>
 
-<div class="span4 offset2" style="margin-top:15px;">
-  <button class="btn pull-right" type="button"><%= link_to "Add Comment.", new_post_comment_path %></button>
-</div>
-
-<div>
-	<% @comment.each do |comment| %>
-    <% if !comment.parent_id.present? %>
-    <div>
-      <%= comment.user.user_name %>
-      <%= " :- " %>
-      <%= comment.content %>
-      <%= link_to 'reply', new_post_comment_path(@post, parent_id: comment.id), remote: true, class: 'd-block' %></br>
-      <%= button_to 'Like', post_likes_path(@post, comment_id: comment.id), method: :post %>
-      <p><%= comment.likes.count %> <%= (comment.likes.count) == 1 ? 'Like' : 'Likes'%></p>
-    	
-    <% if comment.replies.any? %>
-     <% comment.replies.each do |reply| %> 
-       <%= reply.content %>
-     <% end %>
-    <% end %> 
-    </div> 
-    <% end %>
-  <% end %>
-  
-</div>
-
-
-  
+                        <% if comment.replies.any? %>
+                          <% comment.replies.each do |reply| %> 
+                            <div class="d-flex flex-start mt-4">
+                              
+                                <%if reply.user.profile_photo.present?%>
+                                  <%= image_tag url_for(reply.user.profile_photo),:size => "40x40", class: "rounded-circle shadow-1-strong me-3" %>
+                                <% end%>
+                              
+                              <div class="flex-grow-1 flex-shrink-1">
+                                <div>
+                                  <div class="d-flex justify-content-between align-items-center">
+                                    <p class="mb-1">
+                                       <%= reply.user.user_name %>
+                                    </p>
+                                  </div>
+                                  <p class="small mb-0">
+                                    <%= reply.content %>
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          <%end%>  
+                        <%end%>  
+                      <%end%>
+                    </div> 
+                  <%end%>    
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

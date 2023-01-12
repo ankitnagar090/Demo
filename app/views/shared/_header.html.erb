@@ -1,45 +1,30 @@
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<div class="container">
-  <div class="row">
-    <div class="span12">
-      <div class="head">
-        <div class="row-fluid">
-            <div class="span12">
-                <div class="span6">
-                    <h1 class="muted">Instagram</h1>
-                </div>
-
-                <div class="span4 offset2" style="margin-top:15px;">
-                    <button class="btn pull-right" type="button"><%= link_to "Profile", profile_posts_path %></button>
-                </div>
+<div class="header">
+  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">   
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <div class="text-center" class="text-center">
+              <h1 class="muted">Mismatch</h1>
             </div>
-        </div>
-
-        <div class="navbar">
-            <div class="navbar-inner">
-                <div class="container">
-                    <ul class="nav">
-                        <li>
-                            <%= link_to "Add post", new_post_path %>
-                        </li>
-                        <li>
-                         <% if @searchs[:searched_records] %>
-                            <%= form_with url: "/posts/search", method: :get do |form| %>
-                              <%= form.label 'search' %>
-                              <%= form.text_field :s_key %>   </br>                      
-                              <%= form.submit "Search" %>
-                            <% end %>
-                          <% end %>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <li>
+              <button class="btn btn-outline-primary"><%= link_to "Home", posts_path %></button>
+            </li>
+            <li>
+              <button class="btn btn-outline-primary"><%= link_to "Add post", new_post_path %></button>
+            </li>
+            <li>
+              <button class="btn btn-outline-primary"><%= link_to "Profile", profiles_path %></button>
+            </li>
+          </ul>
+          <form >
+            <%= form_with url: "/posts", method: :get do |form| %>
+              <%= form.text_field :search_key %>                      
+              <%= form.submit "Search"%>
+            <% end %> 
+          </form>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+    </nav>
+  
+</div> 

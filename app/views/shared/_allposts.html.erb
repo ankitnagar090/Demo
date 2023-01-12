@@ -1,32 +1,142 @@
-<div class="row justify-content-start">
-  <% @posts.each do |post| %>
-    <div>
-     <%if post.post_file.present?%>
-       <center>
-          
-         <%if post.post_file.content_type.include?("image")%>
-           <%= image_tag url_for(post.post_file), :size => "460x580" %>
-         <% else%>
-           <%= video_tag url_for(post.post_file), controls: "" %>
-         <% end %>    
-       </br> 
-        <%= post.user.user_name%>
-       <strong>description:</strong>
-        <%= post.description %></br>
-        <%= link_to "Show Comment,", post_comments_path(post) %>
-        
-       
-
-       <% pre_like = post.likes.find { |like| like.user_id == current_user.id} %>
-       <p><%= post.likes.count %> <%= (post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
-       <% if pre_like %>
-         <%= button_to 'Unlike', post_like_path(post, pre_like), method: :delete %>
-       <% else %>
-         <%= button_to 'Like', post_likes_path(post), method: :post %>
-       <% end %>
-    </div> 
-       </center>
-     <% end %>
+<div class="row justify-content-start" >
+  <%if @search == true%>
+    <%if @user.id == current_user.id %>
+      <center>
+        <h1>Use not found</h1>
+        <%= link_to "back", posts_path %> 
+      </center> 
+    <% else %>
+      <center>
+        <div >
+          <%if @user.profile_photo.present?%>
+            <%= image_tag url_for(@user.profile_photo),:size => "150x150", class: "rounded-circle"%>
+          <% else%>
+              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" style="width: 150px;"
+           alt="Avatar" />
+          <% end %> 
+        </div>
+        <div >
+          <h1 class="text-primary"><%= @user.user_name %> </h1>
+        </div>
+        <div class="profile-usertitle-job">
+          <%= "bio:- its a bio"%> 
+        </div>  
+        <%if current_user.followees.include?(@user) %>
+          <h5><%= button_to "Unfollow", unfollow_users_path(user_id: @user.id), method: "POST" %></h5>
+        <% elsif current_user.requesters.include?(@user) %>
+          <h5><%= button_to "Request", cancel_users_path(user_id: @user.id), method: "POST" %></h5>  
+        <% else %>
+          <h5><%= button_to "Follow", follow_users_path(user_id: @user.id), method: "POST"  %></h5>
+        <% end%></br>
+        <div class="profile-userbuttons">
+          <button type="button" class="btn btn-success btn-sm"><%= @user.followers.count %> <%= link_to 'Followers', followers_users_path(user_id: @user.id) %></button>
+          <button type="button" class="btn btn-danger btn-sm"><%= @user.followees.count %> <%= link_to 'Following', following_users_path(user_id: @user.id) %></button>
+        </div></br>
+      </center>
+    <% end%> 
+  <% end%> 
+  <div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-center row">
+      <div class="col-md-4">
+        <div class="feed p-2">
+          <div class="bg-white border mt-2">
+            <% @posts.each do |post| %>
+              <div>
+                <%if post.post_file.present?%>
+                  <div class="d-flex flex-row justify-content-between  align-items-center p-2 border-bottom">
+                    <div class="d-flex flex-row align-items-center feed-text px-2">
+                      <%if post.user.profile_photo.present?%>
+                        <%= image_tag url_for(post.user.profile_photo),:size => "40x40", class: "rounded-circle" %>
+                      <% end%>
+                      <div class="d-flex flex-column flex-wrap ml-3"><span class="font-white-bold"><%= link_to post.user.user_name, posts_path(search_key: post.user.user_name)%> </span><span class="text-black-50 time"><%= post.description %></span></div>
+                    </div>
+                    <div class="feed-icon px-2"><i class="fa fa-ellipsis-v text-black-50"></i></div>
+                  </div>
+                  <div class="feed-image p-2 px-3">
+                  <%if post.post_file.content_type.include?("image")%>
+                    <%= image_tag post.post_file, :size => "460x580" %>
+                  <% else%>
+                    <%= video_tag url_for(post.post_file), controls: "", :size => "560x580" %>
+                  <% end %> 
+                  <div>
+                  <i class="d-flex justify-content-start socials p-2 py-3">
+                    <% if current_user.present? %>
+                    <% pre_like = find_like(post,current_user.id )%>
+                    
+                    <% if pre_like %>
+                      <%= link_to post_like_path(post, pre_like),data: { turbo_method: :delete } do%>
+                        <h3 ><%= image_tag "/assets/disllike.png", :size => "40x40" %></h3>
+                      <%end%>
+                    <% else %>
+                      <%= link_to post_likes_path(post),data: { turbo_method: :post } do%>
+                        <h3 ><%= image_tag "/assets/like1.png", :size => "40x40" %></h3>
+                      <%end%>
+                    <% end %>
+                  <% end %>
+                   
+                  <i class="fa fa-likes-o">
+                    <%= post.likes.count %> <%= (post.likes.count) == 1 ? 'Like' : 'Likes'%>
+                  </i>
+                   <%= link_to "Show Comment,", post_comments_path(post) %>
+                   <%= link_to "shared Post,", shareds_path(post_id: post.id) ,data: { turbo_method: :post }%>
+                </i>   
+                  
+                </div>
+                
+                <%end%>
+              </div>  
+            <%end%> 
+            <% @shareds.each do |shared| %>
+            <div>
+              <%if shared.post.post_file.present?%>
+                <div class="d-flex flex-row justify-content-between  align-items-center p-2 border-bottom">
+                  <div class="d-flex flex-row align-items-center feed-text px-2">
+                    <%if shared.post.user.profile_photo.present?%>
+                      <%= image_tag url_for(shared.post.user.profile_photo),:size => "40x40", class: "rounded-circle" %>
+                    <% end%>
+                    <div class="d-flex flex-column flex-wrap ml-3"><span class="font-white-bold"><%= link_to shared.post.user.user_name, posts_path(search_key: shared.post.user.user_name)%> </span><span class="text-black-50 time"><%= shared.post.description %></span></div>
+                    <p>share_by:-<%= link_to shared.user.user_name, posts_path(search_key: shared.user.user_name)%></p>
+                  </div>
+                  <div class="feed-icon px-2"><i class="fa fa-ellipsis-v text-black-50"></i></div>
+                </div>
+                <div class="feed-image p-2 px-3">
+                <%if shared.post.post_file.content_type.include?("image")%>
+                  <%= image_tag shared.post.post_file, :size => "460x580" %>
+                <% else%>
+                  <%= video_tag url_for(shared.post.post_file), controls: "", :size => "560x580" %>
+                <% end %> 
+                <div>
+                <i class="d-flex justify-content-start socials p-2 py-3">
+                  <% if current_user.present? %>
+                  <% pre_like = find_like(shared.post,current_user.id )%>
+                  
+                  <% if pre_like %>
+                    <%= link_to post_like_path(shared.post, pre_like),data: { turbo_method: :delete } do%>
+                      <h3 ><%= image_tag "/assets/disllike.png", :size => "40x40" %></h3>
+                    <%end%>
+                  <% else %>
+                    <%= link_to post_likes_path(shared.post),data: { turbo_method: :post } do%>
+                      <h3 ><%= image_tag "/assets/like1.png", :size => "40x40" %></h3>
+                    <%end%>
+                  <% end %>
+                <% end %>
+                 
+                <i class="fa fa-likes-o">
+                  <%= shared.post.likes.count %> <%= (shared.post.likes.count) == 1 ? 'Like' : 'Likes'%>
+                </i>
+                 <%= link_to "Show Comment,", post_comments_path(shared.post) %>
+                 
+              </i>   
+                
+              </div>
+              
+              <%end%>
+            </div>  
+           <%end%> 
+          </div>
+        </div>
+      </div>
     </div>
-  <% end %>
+  </div>
 </div>
+

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_26_111028) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_10_121333) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -60,12 +60,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_26_111028) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
-  create_table "likes", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "post_id"
+  create_table "follows", force: :cascade do |t|
+    t.integer "follower_id"
+    t.integer "followee_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["post_id"], name: "index_likes_on_post_id"
+    t.boolean "status", default: false
+    t.index ["followee_id"], name: "index_follows_on_followee_id"
+    t.index ["follower_id"], name: "index_follows_on_follower_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "likeable_id"
+    t.string "likeable_type"
+    t.integer "user_id"
+    t.index ["likeable_id"], name: "index_likes_on_likeable_id"
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
@@ -76,7 +88,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_26_111028) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "video"
+    t.integer "status", default: 0
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.integer "requester_id"
+    t.integer "requested_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["requested_id"], name: "index_requests_on_requested_id"
+    t.index ["requester_id"], name: "index_requests_on_requester_id"
+  end
+
+  create_table "shareds", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "post_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_shareds_on_post_id"
+    t.index ["user_id"], name: "index_shareds_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

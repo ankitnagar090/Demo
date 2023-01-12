@@ -1,22 +1,29 @@
-<%= form_with model: post do |form| %>
-  <div>
-    <%= form.label :post_file %><br>
-    <%= form.file_field :post_file %>
-  </div>
-
-  <div>
-    <%= form.label :video %><br>
-    <%= form.file_field :video %>
-  </div>
-
-  <div >
-    <%= form.label :description %><br>
-    <%= form.text_field :description %>
-
-  </div>
-  
-  <p>
-    <%= form.submit %>
-  </p>
- 
-<% end %>
+<div class="text-center">
+  <%= form_with model: post do |form| %>
+    <div class="card">
+      <div class="card-header">
+        Add Post
+      </div>
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <div>
+            <%= form.label :post_file %><br>
+            <%= form.file_field :post_file %>
+          </div>
+          <div >
+            <%= form.label :description %><br>
+            <%= form.text_field :description %>
+          </div>  
+          <div>
+            <%= form.label :status %>
+            <%= form.select :status, Post.statuses.keys %>
+          </div>
+          <p>
+            <%= form.submit %>
+          </p>
+        </blockquote>
+      </div>
+    </div>
+  <% end %>
+  <%= link_to "back", posts_path %> 
+</div>
