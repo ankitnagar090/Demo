@@ -1,0 +1,33 @@
+<%= render "shared/header" %>
+<% @following.each do |following| %>  
+  <center>
+  <div class="card mb-3" style="max-width: 640px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <%if following.profile_photo.present?%>
+          <%= image_tag url_for(following.profile_photo),:size => "150x150", class: "rounded-circle"%>
+          <% else%>
+              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" style="width: 150px;"
+           alt="Avatar" />
+        <%end%>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%=following.user_name %></h5>
+          <p>
+            <%=following.full_name %>
+            <%= link_to "user_profile", posts_path(search_key: following.user_name) %> 
+          </p>
+          <h5><%= button_to "Unfollow", unfollow_users_path(user_id: following.id), method: "POST"  %></h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  </center>
+<% end %>
+<% if @user.id == current_user.id %>
+  <%= link_to "back", profiles_path %> 
+<% else%>
+  <%= link_to "back", posts_path(search_key: @user.user_name)%>  
+<% end%>
+<%= render "shared/footer" %>

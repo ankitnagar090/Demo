@@ -1,0 +1,8 @@
+<div class="footer">
+  <footer class="page-footer font-small bg-primary">
+    <div class="footer-copyright text-center py-3">
+      <p>Logged in as <strong><%= current_user.email %></strong>.
+      <%= link_to "Sign out", '/users/sign_out', method: :delete %></p>
+    </div>
+  </footer>
+</div>  

@@ -1,0 +1,30 @@
+<%= render "shared/header" %>
+<% @requester.each do |requester| %>
+  <center>
+  <div class="card mb-3" style="max-width: 640px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <%if requester.profile_photo.present?%>
+          <%= image_tag url_for(requester.profile_photo),:size => "150x150", class: "rounded-circle"%>
+          <% else%>
+              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" style="width: 150px;"
+           alt="Avatar" />
+        <%end%>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%=requester.user_name %></h5>
+          <p>
+            <%=requester.full_name %>
+            <%= link_to "user_profile", posts_path(search_key: requester.user_name) %> 
+          </p>
+          <h5><%= button_to "Accept", accept_users_path(user_id: requester.id), method: "POST"  %></h5>
+          <h5><%= button_to "Cancel", remove_users_path(user_id: requester.id), method: "POST" %></h5> 
+        </div>
+      </div>
+    </div>
+  </div>
+  </center>  
+<% end %>
+<%= link_to "back", profiles_path %> 
+<%= render "shared/footer" %>

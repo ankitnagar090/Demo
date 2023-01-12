@@ -1,0 +1,12 @@
+git status
+git add
+git commit -m ""
+git stash
+git stash pop
+git push origin branch_name
+git pull origin branch_name
+git checkout branch_name
+git checkout -b branch_name
+git checkout -D branch_name
+git config user.name
+git config user.email

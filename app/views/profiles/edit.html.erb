@@ -1,0 +1,36 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <div class="fadeIn first">
+      <h5>Update Profile</h5>
+    </div>
+
+    <%= form_with model: @user , url: profile_path(@user), method: :patch do |form| %>
+     
+      <div class="fields">
+        <%= form.label :user_name %><br>
+        <%= form.text_field :user_name %>
+      </div>
+
+      <div class="fields">
+        <%= form.label :full_name %><br>
+        <%= form.text_field :full_name %>
+      </div>
+
+      <div class="fields">
+        <%= form.label :bio %><br>
+        <%= form.text_field :bio %>
+      </div>
+
+      <div class="fields">
+        <%= form.label :profile_photo %><br>
+        <%= form.file_field :profile_photo %>
+      </div>
+    
+      <div>
+        <%= form.submit "Update" %>
+      </div>
+     
+    <% end %>
+    <%= link_to "back", profiles_path %> 
+
+</div>

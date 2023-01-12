@@ -1,0 +1,37 @@
+<%= render "shared/header" %></br>
+<%= render "shared/profileheader" %></br>
+<div class="row" >
+  <% @posts.each do |post| %>
+    <div class="column" >
+      <%if post.post_file.present?%>
+        <center>
+          <%if post.post_file.content_type.include?("image")%>
+            <%= image_tag post.post_file, :size => "260x380" %>
+          <% else%>
+            <%= video_tag url_for(post.post_file), controls: "", :size => "280x380" %>
+          <% end %>    
+          </br> 
+          <%= post.user.user_name%>
+          <strong>description:</strong>
+          <%= post.description %>
+           <%= link_to "Destroy post", post_path(post),data: { turbo_method: :delete } %></br>
+          <%= link_to "Show Comment,", post_comments_path(post) %>
+          <% if current_user.present? %>
+            <% pre_like = find_like(post,current_user.id )%>
+            <%= post.likes.count %> <%= (post.likes.count) == 1 ? 'Like' : 'Likes'%>
+            <% if pre_like %>
+              <%= link_to post_like_path(post, pre_like),data: { turbo_method: :delete } do%>
+                <h3 ><%= image_tag "/assets/disllike.png", :size => "40x40" %></h3>
+              <%end%>
+            <% else %>
+              <%= link_to post_likes_path(post),data: { turbo_method: :post } do%>
+                <h3 ><%= image_tag "/assets/like1.png", :size => "40x40" %></h3>
+              <%end%>
+            <% end %>
+          <% end %>  
+        </center>
+      <% end %>   
+   </div>
+  <% end %>
+</div>
+<%= render "shared/footer" %>
